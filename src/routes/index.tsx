@@ -1,9 +1,7 @@
-import { Title } from "@solidjs/meta";
-
 export default function Home() {
   return (
     <main>
-      <h1>Hello world!</h1>
+      <h1 class="text-center text-3xl font-bold mt-20">Home</h1>
     </main>
   );
 }
