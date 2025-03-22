@@ -32,6 +32,9 @@ importers:
       drizzle-orm:
         specifier: ^0.41.0
         version: 0.41.0(@neondatabase/serverless@0.10.4)(@types/pg@8.11.6)(gel@2.0.1)(kysely@0.27.6)
+      lucide-solid:
+        specifier: ^0.483.0
+        version: 0.483.0(solid-js@1.9.5)
       solid-js:
         specifier: ^1.9.5
         version: 1.9.5
@@ -2474,6 +2477,11 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lucide-solid@0.483.0:
+    resolution: {integrity: sha512-eIDOr1FtctYkqOOlpt/0aCmM48cRJsyU+jdVGqxpMv+M27f2xN4ty09vQfZc/xt+JtWGBTmVtZjNAczIeXC+KQ==}
+    peerDependencies:
+      solid-js: ^1.4.7
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -5647,6 +5655,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lucide-solid@0.483.0(solid-js@1.9.5):
+    dependencies:
+      solid-js: 1.9.5
 
   magic-string@0.30.17:
     dependencies:
