@@ -2,6 +2,7 @@ import { authClient } from "~/lib/auth-client";
 import { Show, createSignal, createEffect, onMount } from "solid-js";
 import { A } from "@solidjs/router";
 import { LogIn } from "lucide-solid";
+import FileUpload from "~/components/FileUpload";
 
 export default function Home() {
   const session = authClient.useSession();
@@ -32,13 +33,12 @@ export default function Home() {
           </p>
 
           <div class="w-full mt-4">
-            {isAuth() == true
-              ? <p>fileupload</p>
-              : <A href="/sign-in" class="btn btn-neutral">
+            <Show when={!isAuth()} fallback={<FileUpload />}>
+              <A href="/sign-in" class="btn btn-neutral">
                 Login to get started!
                 <LogIn class="size-4 ml-1" />
               </A>
-            }
+            </Show>
           </div>
 
         </div>
