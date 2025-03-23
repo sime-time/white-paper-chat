@@ -1,8 +1,9 @@
 import { authClient } from "~/lib/auth-client";
-import { Show, createSignal, createEffect, onMount } from "solid-js";
+import { Show, createSignal, createEffect } from "solid-js";
 import { A } from "@solidjs/router";
 import { LogIn } from "lucide-solid";
 import FileUpload from "~/components/FileUpload";
+
 
 export default function Home() {
   const session = authClient.useSession();
@@ -10,7 +11,6 @@ export default function Home() {
 
   createEffect(() => {
     setIsAuth(!!session().data?.session.userId);
-    console.log("isAuth:", isAuth());
   });
 
   return (
@@ -22,13 +22,13 @@ export default function Home() {
             <h1 class="text-5xl font-semibold">Chat with Crypto White Papers</h1>
           </div>
 
-          <div class="flex mt-2">
+          <div class="flex my-4">
             <Show when={isAuth()}>
               <button class="btn">Go to Chats</button>
             </Show>
           </div>
 
-          <p class="max-w-xl mt-1 text-lg text-slate-600">
+          <p class="max-w-xl text-lg text-slate-600">
             Join thousands of traders, investors, and whales to instantly answer questions and research cryptocurrencies with AI.
           </p>
 
