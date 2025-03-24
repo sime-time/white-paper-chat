@@ -13,8 +13,10 @@ export default function App() {
       root={props => (
         <MetaProvider>
           <Title>White Paper Chat</Title>
-          <Nav />
-          <Suspense>{props.children}</Suspense>
+          <Suspense>
+            <Nav />
+            {props.children}
+          </Suspense>
         </MetaProvider>
       )}
     >

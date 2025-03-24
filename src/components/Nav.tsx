@@ -1,35 +1,29 @@
-import { createSignal, Show, createEffect } from "solid-js";
+import { Show } from "solid-js";
+import { A } from "@solidjs/router";
+import { useServerSessionOrNull } from "~/lib/use-server-session";
+import { createAsync } from "@solidjs/router";
 import { authClient } from "~/lib/auth-client";
-import { A, useNavigate } from "@solidjs/router";
 
 function NavList() {
   return (
     <>
       <li><A href="/">Home</A></li>
-      <li><A href="/about">About</A></li>
+      <li><A href="/protected">Protected</A></li>
     </>
   );
 
 }
 
 export default function Nav() {
-  const session = authClient.useSession();
-  const [isSignedIn, setIsSignedIn] = createSignal(false);
-  const navigate = useNavigate();
+  const session = createAsync(() => useServerSessionOrNull());
 
-  createEffect(() => {
-    setIsSignedIn(!!session().data?.session.userId);
-  });
-
-  const handleSignOut = async (event: Event) => {
-    event.preventDefault();
+  const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
-        onSuccess(context) {
-          setIsSignedIn(false);
-          navigate("/", { replace: true });
+        onSuccess: () => {
+          window.location.reload();
         },
-      }
+      },
     });
   };
 
@@ -54,10 +48,10 @@ export default function Nav() {
         </ul>
       </div>
       <div class="navbar-end">
-        <Show when={isSignedIn()} fallback={
+        <Show when={session()} fallback={
           <a href="/sign-in" class="btn btn-primary">Sign In/Up</a>
         }>
-          <button onClick={handleSignOut} class="btn btn-secondary">Sign Out</button>
+          <button onClick={() => handleSignOut()} class="btn btn-secondary">Sign Out</button>
         </Show>
       </div>
     </nav>

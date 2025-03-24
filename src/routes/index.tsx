@@ -1,17 +1,12 @@
-import { authClient } from "~/lib/auth-client";
-import { Show, createSignal, createEffect } from "solid-js";
+import { Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { LogIn } from "lucide-solid";
+import { createAsync } from "@solidjs/router";
+import { useServerSession } from "~/lib/use-server-session";
 import FileUpload from "~/components/FileUpload";
 
-
 export default function Home() {
-  const session = authClient.useSession();
-  const [isAuth, setIsAuth] = createSignal<boolean>(false);
-
-  createEffect(() => {
-    setIsAuth(!!session().data?.session.userId);
-  });
+  const session = createAsync(() => useServerSession());
 
   return (
     <main class="w-screen min-h-screen bg-gradient-to-r from-rose-100 to-teal-100">
@@ -23,7 +18,7 @@ export default function Home() {
           </div>
 
           <div class="flex my-4">
-            <Show when={isAuth()}>
+            <Show when={session()}>
               <button class="btn">Go to Chats</button>
             </Show>
           </div>
@@ -33,7 +28,7 @@ export default function Home() {
           </p>
 
           <div class="w-full mt-4">
-            <Show when={!isAuth()} fallback={<FileUpload />}>
+            <Show when={!session()} fallback={<FileUpload />}>
               <A href="/sign-in" class="btn btn-neutral">
                 Login to get started!
                 <LogIn class="size-4 ml-1" />
