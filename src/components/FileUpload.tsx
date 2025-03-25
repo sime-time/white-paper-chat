@@ -45,16 +45,13 @@ export default function FileUpload() {
     }
   }));
 
-  const uploadToS3 = async (acceptedFiles: File[]) => {
-    console.table(acceptedFiles);
-    const file = acceptedFiles[0];
-    uploadMutation.mutate(file)
-  };
-
   const dropzone = createDropzone({
     accept: ['application/pdf'],
     maxFiles: 1,
-    onDrop: uploadToS3
+    onDrop: async (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0]; // accept only the first file
+      uploadMutation.mutate(file)
+    }
   });
 
   return (
