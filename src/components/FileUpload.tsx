@@ -1,23 +1,18 @@
 import { createDropzone } from "@soorria/solid-dropzone";
 import { Inbox } from "lucide-solid";
 import { createSignal, Show } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
 
 export default function FileUpload() {
   const [uploadStatus, setUploadStatus] = createSignal<string | null>(null);
 
-  const uploadToS3 = async (acceptedFiles: File[]) => {
-    console.table(acceptedFiles);
-    const file = acceptedFiles[0];
-
-    // check file size
-    if (file.size > 10 * 1024 * 1024) {
-      setUploadStatus("File is too large. Maximum size is 10MB.");
-      return;
-    }
-
-    try {
-      // reset status
-      setUploadStatus("Uploading...");
+  const uploadMutation = createMutation(() => ({
+    mutationKey: ["upload"],
+    mutationFn: async (file: File) => {
+      // check file size before upload
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error("File is too large. Maximum size is 10MB.");
+      }
 
       // create FormData for server upload
       const formData = new FormData();
@@ -33,13 +28,27 @@ export default function FileUpload() {
         throw new Error("Upload failed");
       }
 
-      const data = await response.json();
-      setUploadStatus(`Upload successful: ${file.name}`);
-      console.table("Upload data:", data);
-    } catch (err) {
-      console.error(err);
-      setUploadStatus("Upload failed. Please try again.");
+      return response.json();
+    },
+    onMutate: (file) => {
+      setUploadStatus(`Uploading ${file.name}...`);
+    },
+    onSuccess: () => {
+      setUploadStatus("Upload successful")
+    },
+    onError: (error) => {
+      console.error(error);
+      setUploadStatus(`Upload failed. ${error.message}`)
+    },
+    onSettled: () => {
+      console.log("Upload complete.");
     }
+  }));
+
+  const uploadToS3 = async (acceptedFiles: File[]) => {
+    console.table(acceptedFiles);
+    const file = acceptedFiles[0];
+    uploadMutation.mutate(file)
   };
 
   const dropzone = createDropzone({
