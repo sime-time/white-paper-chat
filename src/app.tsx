@@ -4,6 +4,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import Nav from "~/components/Nav";
 import Footer from "~/components/Footer";
+import QueryProvider from "~/providers/QueryProvider";
 
 import "./app.css";
 
@@ -14,8 +15,10 @@ export default function App() {
         <MetaProvider>
           <Title>White Paper Chat</Title>
           <Suspense>
-            <Nav />
-            {props.children}
+            <QueryProvider>
+              <Nav />
+              {props.children}
+            </QueryProvider>
           </Suspense>
         </MetaProvider>
       )}

@@ -24,7 +24,7 @@ export default function FileUpload() {
       formData.append("file", file);
 
       // send to server-side s3 endpoint
-      const response = await fetch("/api/aws/s3", {
+      const response = await fetch("/api/upload/s3", {
         method: "POST",
         body: formData
       });
@@ -35,7 +35,7 @@ export default function FileUpload() {
 
       const data = await response.json();
       setUploadStatus(`Upload successful: ${file.name}`);
-      console.log("Upload data:", data);
+      console.table("Upload data:", data);
     } catch (err) {
       console.error(err);
       setUploadStatus("Upload failed. Please try again.");

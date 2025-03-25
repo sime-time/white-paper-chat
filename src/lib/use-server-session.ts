@@ -2,7 +2,7 @@ import { query, redirect } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
 import { auth } from "~/lib/auth";
 
-export const useServerSession = query(async (redirectUrl: string = "/") => {
+export const useServerSession = query(async () => {
   "use server";
   const event = getRequestEvent();
 
@@ -15,7 +15,7 @@ export const useServerSession = query(async (redirectUrl: string = "/") => {
       return session;
     }
   }
-  throw redirect(redirectUrl);
+  throw redirect("/");
 
 }, "session"); // cache this response under the 'session' cache key
 

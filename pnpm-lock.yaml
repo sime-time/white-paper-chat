@@ -29,6 +29,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.15
         version: 4.0.15(vite@6.2.2(@types/node@22.13.11)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0))
+      '@tanstack/solid-query':
+        specifier: ^5.69.0
+        version: 5.69.0(solid-js@1.9.5)
       better-auth:
         specifier: ^1.2.4
         version: 1.2.4(typescript@5.8.2)
@@ -1760,6 +1763,9 @@ packages:
     resolution: {integrity: sha512-eXjzg2T7eiEruKXtu1XQ2bHV1oO8muGWs+TuDWH3tIFPwH1hIzahWpcTwz5lc7jW5xqud3gru2tK6wTk2JlIrw==}
     engines: {node: '>=12'}
 
+  '@tanstack/query-core@5.69.0':
+    resolution: {integrity: sha512-Kn410jq6vs1P8Nm+ZsRj9H+U3C0kjuEkYLxbiCyn3MDEiYor1j2DGVULqAz62SLZtUZ/e9Xt6xMXiJ3NJ65WyQ==}
+
   '@tanstack/router-utils@1.114.12':
     resolution: {integrity: sha512-W4tltvM9FQuDEJejz/JJD3q/pVHBXBb8VmA77pZlj4IBW97RnUNy8CUwZUgSYcb9OReoO4i/VjjQCUq9ZdiDmg==}
     engines: {node: '>=12'}
@@ -1767,6 +1773,11 @@ packages:
   '@tanstack/server-functions-plugin@1.114.12':
     resolution: {integrity: sha512-tBxLS6eKPrqiViAw5R7yIgdjB7iuLCnsAGcXyHdpMCzHVT8dA/Ac4TwhWYHMt2ltsxnShm2zz9n0ErwRpugJpQ==}
     engines: {node: '>=12'}
+
+  '@tanstack/solid-query@5.69.0':
+    resolution: {integrity: sha512-yWSodAKaTGLRkGHwMe0Gg6Mh11QDoyb7GgjmU8Q0G6MGeAhcPKpPgbALeoNisa8FW5XfW2hFz2vb6zePIdx6rQ==}
+    peerDependencies:
+      solid-js: ^1.6.0
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -5713,6 +5724,8 @@ snapshots:
       - tsx
       - yaml
 
+  '@tanstack/query-core@5.69.0': {}
+
   '@tanstack/router-utils@1.114.12':
     dependencies:
       '@babel/generator': 7.26.10
@@ -5747,6 +5760,11 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  '@tanstack/solid-query@5.69.0(solid-js@1.9.5)':
+    dependencies:
+      '@tanstack/query-core': 5.69.0
+      solid-js: 1.9.5
 
   '@types/babel__core@7.20.5':
     dependencies:
