@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, serial, text, timestamp, vector, index } from "drizzle-orm/pg-core";
 
 export const userSystemEnum = pgEnum("user_system_enum", ['system', 'user']);
 
@@ -18,3 +18,17 @@ export const message = pgTable("message", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   role: userSystemEnum("role").notNull(),
 });
+
+export const guides = pgTable(
+  'guides',
+  {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    url: text('url').notNull(),
+    embedding: vector('embedding', { dimensions: 1536 }),
+  },
+  (table) => [
+    index('embeddingIndex').using('hnsw', table.embedding.op('vector_cosine_ops')),
+  ]
+);

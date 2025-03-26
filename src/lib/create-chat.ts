@@ -1,6 +1,5 @@
-import { APIEvent } from "@solidjs/start/server";
+"use server";
 
-// /api/create-chat 
-export async function POST(event: APIEvent) {
-  
+export async function createChat() {
+
 }

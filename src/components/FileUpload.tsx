@@ -4,9 +4,7 @@ import { createSignal, Show } from "solid-js";
 import { createMutation } from "@tanstack/solid-query";
 import toast from "solid-toast";
 
-
 export default function FileUpload() {
-
   const [isUploading, setIsUploading] = createSignal(false);
 
   const uploadToS3 = createMutation(() => ({
