@@ -2,12 +2,8 @@
 import { downloadFromS3 } from "~/lib/download-from-s3";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { CharacterTextSplitter } from "@langchain/textsplitters";
-import OpenAI from "openai";
 import { Document } from "@langchain/core/documents";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
 
 type PDFPage = {
   pageContent: string;
@@ -53,7 +49,7 @@ async function prepareDocument(page: PDFPage) {
       pageContent: pageContent,
       metadata: {
         pageNumber: metadata.loc.pageNumber,
-        text: truncateStringByBytes(pageContent, 36000);
+        text: truncateStringByBytes(pageContent, 36000),
       },
     })
   ]);
