@@ -1,5 +1,6 @@
 import { PutObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { APIEvent } from "@solidjs/start/server";
+import { createChat } from "~/lib/create-chat";
 
 export async function POST(event: APIEvent) {
   try {
@@ -41,6 +42,8 @@ export async function POST(event: APIEvent) {
     });
 
     await s3.send(command);
+
+    await createChat(file.name, fileKey);
 
     return new Response(JSON.stringify({
       fileKey,
