@@ -2,13 +2,17 @@ import { createDropzone } from "@soorria/solid-dropzone";
 import { Inbox } from "lucide-solid";
 import { createSignal, Show } from "solid-js";
 import { createMutation } from "@tanstack/solid-query";
+import toast from "solid-toast";
+
 
 export default function FileUpload() {
-  const [uploadStatus, setUploadStatus] = createSignal<string | null>(null);
 
-  const uploadMutation = createMutation(() => ({
+  const [isUploading, setIsUploading] = createSignal(false);
+
+  const uploadToS3 = createMutation(() => ({
     mutationKey: ["upload"],
     mutationFn: async (file: File) => {
+      setIsUploading(true);
       // check file size before upload
       if (file.size > 10 * 1024 * 1024) {
         throw new Error("File is too large. Maximum size is 10MB.");
@@ -30,18 +34,16 @@ export default function FileUpload() {
 
       return response.json();
     },
-    onMutate: (file) => {
-      setUploadStatus(`Uploading ${file.name}...`);
-    },
     onSuccess: () => {
-      setUploadStatus("Upload successful")
+      toast.success("Upload successful");
     },
     onError: (error) => {
       console.error(error);
-      setUploadStatus(`Upload failed. ${error.message}`)
+      toast.error(`Upload failed. ${error.message}`);
     },
     onSettled: () => {
       console.log("Upload complete.");
+      setIsUploading(false);
     }
   }));
 
@@ -50,7 +52,7 @@ export default function FileUpload() {
     maxFiles: 1,
     onDrop: async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0]; // accept only the first file
-      uploadMutation.mutate(file)
+      uploadToS3.mutate(file)
     }
   });
 
@@ -59,19 +61,15 @@ export default function FileUpload() {
       <div class="cursor-pointer border-dashed border-2 border-neutral-300 rounded-xl bg-neutral-50 py-8 justify-center items-center flex flex-col" {...dropzone.getRootProps()}>
         <input {...dropzone.getInputProps()} />
         <div class="flex flex-col gap-4 justify-center items-center px-5">
-          <Inbox class="size-10 text-secondary" />
-          {dropzone.isDragActive ? (
-            <p class="mt-2 text-sm text-neutral-400">Drop the file here ...</p>
-          ) : (
+          <Show when={isUploading()} fallback={<>
+            <Inbox class="size-10 text-secondary" />
             <p class="mt-2 text-sm text-neutral-400">Drag 'n' drop a file here, or click to select a file</p>
-          )}
+          </>}>
+            <span class="loading loading-spinner loading-xl text-secondary size-10"></span>
+            <p class="mt-2 text-sm text-neutral-400">Uploading file...</p>
+          </Show>
         </div>
       </div>
-      <Show when={uploadStatus()}>
-        <div class="mt-2 text-sm text-center">
-          {uploadStatus()}
-        </div>
-      </Show>
     </div>
   );
 }

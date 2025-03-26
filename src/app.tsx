@@ -4,6 +4,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import Nav from "~/components/Nav";
 import Footer from "~/components/Footer";
+import { Toaster } from "solid-toast";
 import QueryProvider from "~/providers/QueryProvider";
 
 import "./app.css";
@@ -18,6 +19,7 @@ export default function App() {
             <QueryProvider>
               <Nav />
               {props.children}
+              <Toaster position="bottom-right" />
             </QueryProvider>
           </Suspense>
         </MetaProvider>
