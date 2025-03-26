@@ -3,9 +3,11 @@ import { Inbox } from "lucide-solid";
 import { createSignal, Show } from "solid-js";
 import { createMutation } from "@tanstack/solid-query";
 import toast from "solid-toast";
+import { useNavigate } from "@solidjs/router";
 
 export default function FileUpload() {
   const [isUploading, setIsUploading] = createSignal(false);
+  const navigate = useNavigate();
 
   const uploadToS3 = createMutation(() => ({
     mutationKey: ["upload"],
@@ -27,13 +29,14 @@ export default function FileUpload() {
       });
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        throw new Error("Invalid server response");
       }
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: ({ chatId }) => {
       toast.success("Upload successful");
+      navigate(`/chat/${chatId}`);
     },
     onError: (error) => {
       console.error(error);

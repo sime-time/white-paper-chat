@@ -1,9 +1,19 @@
 import { PutObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { APIEvent } from "@solidjs/start/server";
 import { createChat } from "~/lib/create-chat";
+import { auth } from "~/lib/auth";
 
 export async function POST(event: APIEvent) {
   try {
+    // get the user id from the header
+    const session = await auth.api.getSession({
+      headers: event.request.headers,
+    });
+    if (!session) {
+      throw new Error("User not authorized");
+    }
+    const userId = session.user.id;
+
     const formData = await event.request.formData();
     const file = formData.get("file") as File;
 
@@ -43,18 +53,22 @@ export async function POST(event: APIEvent) {
 
     await s3.send(command);
 
-    await createChat(file.name, fileKey);
+    const chatId = await createChat(file.name, fileKey, userId);
+    if (!chatId) {
+      throw new Error("Chat creation failed")
+    }
 
     return new Response(JSON.stringify({
       fileKey,
       fileName: file.name,
+      chatId: chatId,
     }), {
       status: 200,
       headers: { "Content-type": "application/json" }
     });
 
   } catch (err) {
-    console.error("S3 Upload Error:", err);
+    console.log("S3 Upload Error:", err);
     return new Response(JSON.stringify({
       error: 'Upload failed',
       details: err instanceof Error ? err.message : 'Unknown error'

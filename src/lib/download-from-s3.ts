@@ -33,5 +33,11 @@ export async function downloadFromS3(fileKey: string) {
     console.error(err);
     return null;
   }
+}
 
+export function getS3Url(fileKey: string) {
+  const bucket = process.env.AWS_S3_BUCKET_NAME!;
+  const region = process.env.AWS_S3_REGION!;
+  const url = `https://${bucket}.s3.${region}.amazonaws.com/${fileKey}`
+  return url;
 }
