@@ -1,19 +1,20 @@
-import { S3 } from "@aws-sdk/client-s3"
+"use server";
+import { S3, GetObjectCommand } from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import fs from "fs";
 
-export async function downloadFromS3(fileKey: string) {
-  "use server";
-  try {
-    // instantiate s3
-    const bucketRegion = process.env.AWS_S3_REGION!;
-    const s3 = new S3({
-      region: bucketRegion,
-      credentials: {
-        accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY!,
-      },
-    });
+// instantiate s3
+const bucketRegion = process.env.AWS_S3_REGION!;
+const s3 = new S3({
+  region: bucketRegion,
+  credentials: {
+    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY!,
+  },
+});
 
+export async function downloadFromS3(fileKey: string) {
+  try {
     // retrieve from S3
     const obj = await s3.getObject({
       Bucket: process.env.AWS_S3_BUCKET_NAME!,
@@ -40,4 +41,15 @@ export function getS3Url(fileKey: string) {
   const region = process.env.AWS_S3_REGION!;
   const url = `https://${bucket}.s3.${region}.amazonaws.com/${fileKey}`
   return url;
+}
+
+export async function getSignedPdfUrl(fileKey: string) {
+  const command = new GetObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME!,
+    Key: fileKey,
+  });
+
+  // URL with expiration
+  const signedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  return signedUrl;
 }
