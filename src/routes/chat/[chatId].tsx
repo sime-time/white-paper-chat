@@ -1,4 +1,4 @@
-import { createSignal, createEffect, Show, onMount } from "solid-js";
+import { Show } from "solid-js";
 import { useParams, createAsync, query } from "@solidjs/router"
 import { useServerSession } from "~/lib/use-server-session";
 import ErrorPage from "~/components/ErrorPage";
@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import ChatSidebar from "~/components/ChatSidebar";
 import PDFView from "~/components/PDFView";
 import { getSignedPdfUrl } from "~/lib/download-from-s3";
+import ChatMessenger from "~/components/ChatMessenger";
 
 // server-side query for chats
 const getChats = query(async () => {
@@ -56,7 +57,7 @@ export default function Chat() {
         </div>
 
         <div class="flex-[3] border-1/4 border-l-slate-200">
-          {/* chat component */}
+          <ChatMessenger />
         </div>
 
       </div>
