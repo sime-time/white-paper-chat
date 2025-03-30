@@ -9,7 +9,7 @@ export default function ChatMessenger() {
   });
 
   return (
-    <div class="relative max-h-screen overflow-scroll">
+    <div class="relative max-h-screen overflow-scroll -z-10">
       {/* header */}
       <div class="sticky top-0 inset-x-0 p-2 bg-white h-fit">
         <h3 class="text-xl font-bold">Chat</h3>
