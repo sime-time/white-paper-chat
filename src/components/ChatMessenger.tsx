@@ -1,35 +1,15 @@
-import { useChat } from "@ai-sdk/solid"
+import { useChat, useCompletion } from "@ai-sdk/solid"
 import { Send } from "lucide-solid";
 import MessageList from "./MessageList";
-import { createEffect } from "solid-js";
 
-interface ChatMessengerProps {
-  chatId: number;
-}
-
-export default function ChatMessenger(props: ChatMessengerProps) {
+export default function ChatMessenger() {
   const { input, handleInputChange, handleSubmit, messages } = useChat({
     api: "/api/chat",
     streamProtocol: "text",
-    body: {
-      chatId: props.chatId,
-    }
-  });
-
-  //let messageContainer!: HTMLDivElement;
-  createEffect(() => {
-    // scroll to the bottom of container whenever there is a new message
-    const messageContainer = document.getElementById("message-container");
-    if (messageContainer) {
-      messageContainer.scrollTo({
-        top: messageContainer.scrollHeight,
-        behavior: "smooth",
-      });
-    }
   });
 
   return (
-    <div class="relative max-h-screen overflow-scroll" id="message-container">
+    <div class="relative max-h-screen overflow-scroll -z-10">
       {/* header */}
       <div class="sticky top-0 inset-x-0 p-2 bg-white h-fit">
         <h3 class="text-xl font-bold">Chat</h3>
@@ -45,7 +25,7 @@ export default function ChatMessenger(props: ChatMessengerProps) {
             value={input()}
             onChange={handleInputChange}
             placeholder="Ask any question..."
-            class="flex-grow input"
+            class="flex-grow"
           />
           <button class="btn btn-primary ml-2">
             <Send class="size-4" />

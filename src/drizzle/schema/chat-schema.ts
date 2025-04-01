@@ -11,6 +11,7 @@ export const chat = pgTable("chat", {
   userId: text("user_id").references(() => user.id).notNull(),
   fileKey: text("file_key").notNull(), // for retrieving file from s3
 });
+
 export type DrizzleChat = typeof chat.$inferSelect;
 
 export const message = pgTable("message", {
@@ -23,7 +24,7 @@ export const message = pgTable("message", {
 
 export const segment = pgTable("segment", {
   id: text("id").primaryKey(),
-  chatId: integer("chat_id").references(() => chat.id),
+  //chatId: integer("chat_id").references(() => chat.id).notNull(),
   content: text("content").notNull(),
   embedding: vector("embedding", { dimensions: 1536 }).notNull(),
   pageNumber: integer("page_number"),
@@ -31,4 +32,3 @@ export const segment = pgTable("segment", {
 }, (table) => [
   index("embeddingIndex").using("hnsw", table.embedding.op("vector_cosine_ops")),
 ]);
-export type DrizzleSegment = typeof segment.$inferSelect;

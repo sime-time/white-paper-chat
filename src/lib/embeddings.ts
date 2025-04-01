@@ -8,7 +8,7 @@ export async function generateEmbedding(text: string) {
   try {
     const response = await openai.embeddings.create({
       model: "text-embedding-ada-002",
-      input: String(text).replace(/\n/g, ' '), // ensure text is a string and replace newlines with space
+      input: text.replace(/\n/g, ' '), // replace newlines with space
     });
     return response.data[0].embedding as number[];
 

@@ -9,6 +9,7 @@ export async function createChat(fileName: string, fileKey: string, userId: stri
     throw new Error("Session User ID not found")
   }
   try {
+    await downloadFileToVector(fileKey);
     const chatId = await db.insert(chat).values({
       fileKey: fileKey,
       pdfName: fileName,
@@ -18,7 +19,6 @@ export async function createChat(fileName: string, fileKey: string, userId: stri
       insertedId: chat.id,
     });
     console.log("Inserted chat:", chatId[0].insertedId);
-    await downloadFileToVector(fileKey, chatId[0].insertedId);
     return chatId[0].insertedId;
 
   } catch (err) {
