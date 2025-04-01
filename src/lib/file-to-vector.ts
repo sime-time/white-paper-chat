@@ -15,7 +15,7 @@ type PDFPage = {
   }
 };
 
-export async function downloadFileToVector(fileKey: string) {
+export async function downloadFileToVector(fileKey: string, chatId: number) {
   // download and read the pdf from s3
   console.log("downloading s3 into file system...");
   const fileName = await downloadFromS3(fileKey);
@@ -29,7 +29,7 @@ export async function downloadFileToVector(fileKey: string) {
   const documents = await Promise.all(pages.map(prepareDocument));
 
   // vectorize and embed into individual sections
-  const vectors = await Promise.all(documents.flat().map(embedDocument));
+  const vectors = await Promise.all(documents.flat().map((doc) => embedDocument(doc, chatId)));
 
   // upload the array of vector sections into database
   console.log("inserting vectors into database...");
@@ -38,7 +38,7 @@ export async function downloadFileToVector(fileKey: string) {
   return documents[0]; // just return the first doc for now
 }
 
-async function embedDocument(doc: Document) {
+async function embedDocument(doc: Document, chatId: number) {
   try {
     const embedding = await generateEmbedding(doc.pageContent);
     const hash = md5(doc.pageContent);
@@ -48,6 +48,7 @@ async function embedDocument(doc: Document) {
       content: doc.metadata.text,
       embedding: embedding,
       pageNumber: doc.metadata.pageNumber,
+      chatId: chatId,
     };
   } catch (err) {
     console.error("Error embedding document", err);

@@ -24,7 +24,7 @@ export const message = pgTable("message", {
 
 export const segment = pgTable("segment", {
   id: text("id").primaryKey(),
-  //chatId: integer("chat_id").references(() => chat.id).notNull(),
+  chatId: integer("chat_id").references(() => chat.id).notNull(),
   content: text("content").notNull(),
   embedding: vector("embedding", { dimensions: 1536 }).notNull(),
   pageNumber: integer("page_number"),

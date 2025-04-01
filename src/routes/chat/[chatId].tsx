@@ -45,19 +45,19 @@ export default function Chat() {
   const pdfUrl = createAsync(() => getPdfUrl(params.chatId));
 
   return <Show when={session()} fallback={<ErrorPage />}>
-    <main class="flex max-h-screen overflow-scroll">
-      <div class="flex w-full max-h-screen overflow-scroll">
+    <main class="flex">
+      <div class="flex w-full">
 
         <div class="flex-[1.5] 2xl:flex-[1] max-w-xs">
           <ChatSidebar chats={chats()} chatId={parseInt(params.chatId)} />
         </div>
 
-        <div class="max-h-screen p-4 overflow-scroll flex-[5]">
+        <div class="max-h-screen px-4 pt-1 flex-[5]">
           <PDFView pdfUrl={pdfUrl() || ""} />
         </div>
 
-        <div class="flex-[3] border-1/4 border-l-slate-200">
-          <ChatMessenger />
+        <div class="flex-[3] border-1/4 border-l-slate-200 pt-1">
+          <ChatMessenger chatId={parseInt(params.chatId)} />
         </div>
 
       </div>
