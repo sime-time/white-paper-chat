@@ -58,8 +58,7 @@ export async function POST(event: APIEvent) {
 
         const aiText = aiMessageContent.find(msg => msg.role === "assistant")?.content || "dud";
 
-        const aiResponseText = response.messages.find(msg => msg.content);
-        console.log("AI Response Text:", aiResponseText);
+        console.log("response messages:", response.messages.find(msg => msg.content)?.content);
 
         await db.insert(message).values({
           chatId: chatId,
