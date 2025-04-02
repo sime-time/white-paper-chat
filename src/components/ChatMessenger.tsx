@@ -1,18 +1,47 @@
-import { useChat } from "@ai-sdk/solid"
+import { useChat, Message } from "@ai-sdk/solid"
 import { Send } from "lucide-solid";
 import MessageList from "./MessageList";
 import { createEffect } from "solid-js";
+import { createQuery } from "@tanstack/solid-query";
 
 interface ChatMessengerProps {
   chatId: number;
 }
 export default function ChatMessenger(props: ChatMessengerProps) {
+  const { data } = createQuery(() => ({
+    queryKey: ["chat", props.chatId],
+    queryFn: async () => {
+      try {
+        const response = await fetch("/api/get-messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chatId: props.chatId
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch messages");
+        }
+        return await response.json() as Message[];
+
+      } catch (err) {
+        console.log("Failed to get messages")
+        return [];
+      }
+    }
+  }));
+
   const { input, handleInputChange, handleSubmit, messages } = useChat({
     api: "/api/chat",
     streamProtocol: "text",
     body: {
       chatId: props.chatId
     },
+    initialMessages: data || [],
   });
 
   createEffect(() => {

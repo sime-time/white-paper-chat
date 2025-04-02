@@ -24,7 +24,11 @@ const getChats = query(async () => {
 // server-side query for pdfUrl
 const getPdfUrl = query(async (chatId: string) => {
   "use server";
-  const currentChat = await db.select().from(chat).where(eq(chat.id, parseInt(chatId))).limit(1);
+  const currentChat = await db
+    .select()
+    .from(chat)
+    .where(eq(chat.id, parseInt(chatId)))
+    .limit(1);
 
   const signedUrl = await getSignedPdfUrl(currentChat[0].fileKey);
   return signedUrl;

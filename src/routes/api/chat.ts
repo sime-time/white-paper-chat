@@ -1,9 +1,9 @@
 import { openai } from "@ai-sdk/openai";
 import { APIEvent } from "@solidjs/start/server";
-import { Message, streamText } from "ai"
+import { appendResponseMessages, Message, streamText } from "ai"
 import { db } from "~/drizzle/db";
 import { eq } from "drizzle-orm";
-import { chat } from "~/drizzle/schema/chat-schema";
+import { chat, message } from "~/drizzle/schema/chat-schema";
 import { getContext } from "~/lib/get-context";
 
 export async function POST(event: APIEvent) {
@@ -15,6 +15,7 @@ export async function POST(event: APIEvent) {
       return new Response(JSON.stringify({ error: "Chat not found" }), { status: 404 });
     }
 
+    // user's last message/query
     const lastMessage = messages[messages.length - 1];
     const context = await getContext(lastMessage.content, parseInt(chatId));
 
@@ -42,6 +43,30 @@ export async function POST(event: APIEvent) {
         prompt,
         ...messages.filter((message: Message) => message.role === "user"), // save some token space by only using user messages
       ],
+      onFinish: async ({ response }) => {
+        // save user message into db
+        await db.insert(message).values({
+          chatId: chatId,
+          content: lastMessage.content,
+          role: "user",
+        });
+        // save ai message into db
+        const aiMessageContent = appendResponseMessages({
+          messages: messages,
+          responseMessages: response.messages,
+        });
+
+        const aiText = aiMessageContent.find(msg => msg.role === "assistant")?.content || "dud";
+
+        const aiResponseText = response.messages.find(msg => msg.content);
+        console.log("AI Response Text:", aiResponseText);
+
+        await db.insert(message).values({
+          chatId: chatId,
+          content: aiText,
+          role: "system",
+        });
+      },
     });
 
     return result.toTextStreamResponse();

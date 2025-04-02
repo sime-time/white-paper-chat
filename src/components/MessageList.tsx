@@ -12,9 +12,7 @@ export default function MessageList(props: MessageListProps) {
       <For each={props.messages}>
         {(message) => (
           <div class={`chat ${message.role === "user" ? "chat-end" : "chat-start"}`}>
-            <div class={`chat-bubble
-              ${message.role === "user" ? "bg-primary text-white" : "bg-neutral-200/80"}`}
-            >
+            <div class={`chat-bubble ${message.role === "user" ? "bg-primary text-white" : "bg-neutral-200/80"}`}>
               <p>{message.content}</p>
             </div>
           </div>
