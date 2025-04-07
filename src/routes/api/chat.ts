@@ -56,7 +56,7 @@ export async function POST(event: APIEvent) {
           responseMessages: response.messages,
         });
 
-        const aiText = aiMessageContent.find(msg => msg.role === "assistant")?.content || "dud";
+        const aiText = aiMessageContent.find(msg => msg.role === "assistant")?.content || "error. try again.";
 
         console.log("response messages:", response.messages.find(msg => msg.content)?.content);
 
