@@ -1,4 +1,4 @@
-import { Message } from "@ai-sdk/solid";
+import { Message } from "ai";
 import { For } from "solid-js";
 
 interface MessageListProps {

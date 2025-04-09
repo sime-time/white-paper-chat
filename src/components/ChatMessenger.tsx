@@ -1,14 +1,15 @@
-import { useChat, Message } from "@ai-sdk/solid"
+import { useChat } from "@ai-sdk/solid"
 import { Send } from "lucide-solid";
 import MessageList from "./MessageList";
 import { createEffect } from "solid-js";
+import { Message } from "ai"
 
 interface ChatMessengerProps {
   chatId: number;
   messages: Message[] | undefined;
 }
 export default function ChatMessenger(props: ChatMessengerProps) {
-  const { input, handleInputChange, handleSubmit, messages } = useChat({
+  const { input, handleInputChange, handleSubmit, messages, setMessages } = useChat({
     api: "/api/chat",
     streamProtocol: "text",
     body: {
@@ -16,6 +17,12 @@ export default function ChatMessenger(props: ChatMessengerProps) {
     },
     initialMessages: props.messages,
   });
+
+  createEffect(() => {
+    if (props.messages) {
+      setMessages(props.messages);
+    }
+  })
 
   createEffect(() => {
     const messageContainer = document.getElementById("message-container");

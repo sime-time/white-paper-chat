@@ -16,7 +16,6 @@ export default function Home() {
             <h1 class="text-5xl font-semibold">Chat with Crypto White Papers</h1>
           </div>
 
-          {/* Ensure fallback is provided for session */}
           <Show when={session()}>
             <button class="btn">Go to Chats</button>
           </Show>
