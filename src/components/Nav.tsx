@@ -8,7 +8,6 @@ function NavList() {
   return (
     <>
       <li><A href="/">Home</A></li>
-      <li><A href="/protected">Protected</A></li>
     </>
   );
 

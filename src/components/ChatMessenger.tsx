@@ -1,14 +1,15 @@
 import { useChat } from "@ai-sdk/solid"
 import { Send } from "lucide-solid";
 import MessageList from "./MessageList";
-import { createEffect } from "solid-js";
+import { createEffect, Show } from "solid-js";
 import { Message } from "ai"
 
 interface ChatMessengerProps {
-  chatId: number;
+  chatId?: number;
   messages: Message[] | undefined;
 }
 export default function ChatMessenger(props: ChatMessengerProps) {
+
   const { input, handleInputChange, handleSubmit, messages, setMessages } = useChat({
     api: "/api/chat",
     streamProtocol: "text",
@@ -53,7 +54,7 @@ export default function ChatMessenger(props: ChatMessengerProps) {
             placeholder="Ask any question..."
             class="flex-grow input"
           />
-          <button class="btn btn-primary ml-2">
+          <button class="btn btn-primary ml-2" disabled={!props.chatId ? true : false}>
             <Send class="size-4" />
           </button>
         </div>

@@ -17,7 +17,7 @@ export default function Home() {
           </div>
 
           <Show when={session()}>
-            <button class="btn">Go to Chats</button>
+            <a class="btn" href="/chat">Go to Chats</a>
           </Show>
 
           <p class="max-w-xl text-lg text-slate-600">

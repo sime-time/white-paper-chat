@@ -4,7 +4,7 @@ import { For } from "solid-js";
 import { DrizzleChat } from "~/drizzle/schema/chat-schema";
 
 interface ChatSidebarProps {
-  chatId: number,
+  chatId?: number,
   chats: DrizzleChat[] | undefined,
 }
 export default function ChatSidebar(props: ChatSidebarProps) {
