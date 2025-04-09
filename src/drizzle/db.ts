@@ -4,8 +4,11 @@ import { user } from "./schema/auth-schema";
 import { User } from "better-auth";
 import { eq } from "drizzle-orm";
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle({ client: sql });
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL environment variable is not set.");
+}
+const sql = neon(process.env.DATABASE_URL);
+export const db = drizzle(sql);
 
 export async function getAllUsers() {
   "use server";

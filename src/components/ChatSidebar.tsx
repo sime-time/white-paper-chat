@@ -20,7 +20,7 @@ export default function ChatSidebar(props: ChatSidebarProps) {
       <div class="flex flex-col gap-2 mt-4">
         <For each={props.chats}>
           {(chat, index) => (
-            <A href={`/chat/${chat.id}`}>
+            <a href={`/chat/${chat.id}`}>
               <div class={`rounded-field flex items-center p-3 text-slate-300
                 ${chat.id === props.chatId
                   ? "bg-primary text-white"
@@ -30,7 +30,7 @@ export default function ChatSidebar(props: ChatSidebarProps) {
                 <MessageCircle class="size-4 mr-2" />
                 <p class="w-full overflow-hidden text-sm truncate whitespace-nowrap text-ellipsis">{chat.pdfName}</p>
               </div>
-            </A>
+            </a>
           )}
         </For>
       </div>

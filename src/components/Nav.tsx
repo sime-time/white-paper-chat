@@ -18,6 +18,7 @@ export default function Nav() {
   const session = createAsync(() => useServerSessionOrNull());
 
   const handleSignOut = async () => {
+    console.log("signing out...");
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {

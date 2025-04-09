@@ -1,23 +1,20 @@
 import { useChat, Message } from "@ai-sdk/solid"
 import { Send } from "lucide-solid";
 import MessageList from "./MessageList";
-import { createEffect, Suspense } from "solid-js";
-import { createAsync } from "@solidjs/router";
-import { getMessages } from "~/lib/get-messages";
+import { createEffect } from "solid-js";
 
 interface ChatMessengerProps {
   chatId: number;
+  messages: Message[] | undefined;
 }
 export default function ChatMessenger(props: ChatMessengerProps) {
-  const pastMessages = createAsync(() => getMessages(props.chatId));
-
   const { input, handleInputChange, handleSubmit, messages } = useChat({
     api: "/api/chat",
     streamProtocol: "text",
     body: {
       chatId: props.chatId
     },
-    initialMessages: pastMessages(),
+    initialMessages: props.messages,
   });
 
   createEffect(() => {
@@ -38,9 +35,7 @@ export default function ChatMessenger(props: ChatMessengerProps) {
       </div>
 
       {/* message list */}
-      <Suspense fallback={<div>Loading messages...</div>}>
-        <MessageList messages={messages()} />
-      </Suspense>
+      <MessageList messages={messages()} />
 
       {/* submit new message */}
       <form onSubmit={handleSubmit} class="sticky bottom-0 inset-x-0 px-2 py-4 bg-white">
