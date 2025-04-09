@@ -1,3 +1,4 @@
+"use server";
 import { query } from "@solidjs/router"
 import { useServerSession } from "~/lib/use-server-session";
 import { db } from "~/drizzle/db";

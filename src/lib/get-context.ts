@@ -1,3 +1,4 @@
+"use server";
 import { db } from "~/drizzle/db";
 import { cosineDistance, sql, eq, and, gt, desc } from "drizzle-orm";
 import { segment } from "~/drizzle/schema/chat-schema";
