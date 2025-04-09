@@ -17,7 +17,6 @@ export default function App() {
           <Title>White Paper Chat</Title>
           <Suspense>
             <QueryProvider>
-              <Nav />
               {props.children}
               <Toaster position="bottom-right" />
             </QueryProvider>

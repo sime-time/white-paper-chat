@@ -13,7 +13,7 @@ export default function Home() {
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div class="flex flex-col items-center text-center gap-4">
           <div class="flex items-center">
-            <h1 class="text-5xl font-semibold">Chat with Crypto White Papers</h1>
+            <h1 class="text-5xl font-semibold md:text-nowrap">Chat with Crypto White Papers</h1>
           </div>
 
           <Show when={session()}>
